@@ -1,3 +1,7 @@
+#![feature(test)]
+
+extern crate test;
+
 
 struct ParsedLine {
     numbers: Vec<(u32, Vec<NumberRange>)>
@@ -132,4 +136,12 @@ mod tests {
         assert_eq!(result, "84159075");
     }
 
+}
+
+#[bench]
+fn bench_part2(b: &mut test::Bencher) {
+    b.iter(|| {
+        let input = include_str!("../../input1.txt");
+        let _ = part2(input);
+    });
 }

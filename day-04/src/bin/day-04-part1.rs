@@ -1,8 +1,10 @@
+#![feature(test)]
 
+extern crate test;
 
 #[derive(Debug)]
 struct Card {
-    id: u32,
+    _id: u32,
     winning_numbers: Vec<u32>,
     my_numbers: Vec<u32>
 }
@@ -39,7 +41,7 @@ impl From<&str> for Card {
         
 
         Card {
-            id,
+            _id: id,
             winning_numbers,
             my_numbers
         }
@@ -95,4 +97,12 @@ mod tests {
             Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11");
         assert_eq!(result, "13");
     }
+}
+
+#[bench]
+fn bench_part1(b: &mut test::Bencher) {
+    b.iter(|| {
+        let input = include_str!("../../input1.txt");
+        let _ = part1(input);
+    });
 }

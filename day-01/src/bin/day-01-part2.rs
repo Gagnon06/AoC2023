@@ -1,3 +1,8 @@
+#![feature(test)]
+
+extern crate test;
+
+
 const POSSIBLE_DIGITS: [(&'static str, u32); 18] = [
     ("one", 1), ("1", 1),
     ("two", 2), ("2", 2),
@@ -65,4 +70,12 @@ mod tests {
                     7pqrstsixteen\n");
         assert_eq!(result, "281");
     }
+}
+
+#[bench]
+fn bench_part2(b: &mut test::Bencher) {
+    b.iter(|| {
+        let input = include_str!("../../input1.txt");
+        let _ = part2(input);
+    });
 }

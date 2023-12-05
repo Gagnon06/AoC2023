@@ -1,3 +1,8 @@
+#![feature(test)]
+
+extern crate test;
+
+
 const BASE: u32 = 10;
 
 fn main() {
@@ -40,4 +45,12 @@ mod tests {
                     treb7uchet\n");
         assert_eq!(result, "142");
     }
+}
+
+#[bench]
+fn bench_part1(b: &mut test::Bencher) {
+    b.iter(|| {
+        let input = include_str!("../../input1.txt");
+        let _ = part1(input);
+    });
 }

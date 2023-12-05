@@ -1,3 +1,6 @@
+#![feature(test)]
+
+extern crate test;
 
 
 #[derive(Debug, Clone)]
@@ -106,4 +109,13 @@ mod tests {
         let result = part2(input);
         assert_eq!(result, "12648035");
     }
+}
+
+#[bench]
+fn bench_part2(b: &mut test::Bencher) {
+    b.iter(|| {
+        let input = include_str!("../../input1.txt");
+        let result = part2(input);
+        assert_eq!(result, "12648035");
+    });
 }

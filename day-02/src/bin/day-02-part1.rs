@@ -1,7 +1,16 @@
+#![feature(test)]
+
+extern crate test;
+
+
 use regex::Regex;
 
+const MAX_RED: u32 = 12;
+const MAX_GREEN: u32 = 13;
+const MAX_BLUE: u32 = 14;
+
 struct Game {
-    _id: u32,
+    id: u32,
     red: Vec<u32>,
     green: Vec<u32>,
     blue: Vec<u32>
@@ -23,7 +32,7 @@ impl From<&str> for Game {
             .collect();
 
         Self {
-            _id: caps["id"].parse().unwrap(),
+            id: caps["id"].parse().unwrap(),
             red: hands.iter().filter_map(|hand| Some(hand.red)).collect(),
             green: hands.iter().filter_map(|hand| Some(hand.green)).collect(),
             blue: hands.iter().filter_map(|hand| Some(hand.blue)).collect()
@@ -77,18 +86,21 @@ impl From<&str> for Hand {
 
 fn main() {
     let input = include_str!("../../input1.txt");
-    let output = part2(input);
+    let output = part1(input);
     dbg!(output);
 }
 
-fn part2(input: &str) -> String {
+fn part1(input: &str) -> String {
     let total: u32 = input
         .lines()
         .map(|line| Game::from(line))
         .filter_map(|game| {
-            Some(*game.red.iter().max().unwrap() * 
-            *game.green.iter().max().unwrap() * 
-            *game.blue.iter().max().unwrap())
+            if *game.red.iter().max().unwrap() <= MAX_RED && 
+               *game.green.iter().max().unwrap() <= MAX_GREEN && 
+               *game.blue.iter().max().unwrap() <= MAX_BLUE {
+                return Some(game.id);
+            }
+            None
         })
         .sum();
 
@@ -100,13 +112,21 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_part2() {
-        let result = part2(
+    fn test_part1() {
+        let result = part1(
             "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green\n\
                     Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue\n\
                     Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red\n\
                     Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red\n\
                     Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
-        assert_eq!(result, "2286");
+        assert_eq!(result, "8");
     }
+}
+
+#[bench]
+fn bench_part1(b: &mut test::Bencher) {
+    b.iter(|| {
+        let input = include_str!("../../input1.txt");
+        let _ = part1(input);
+    });
 }

@@ -1,3 +1,8 @@
+#![feature(test)]
+
+extern crate test;
+
+
 use regex::Regex;
 
 fn main() {
@@ -134,4 +139,12 @@ mod tests {
         let result = part1(input);
         assert_eq!(result, "539713");
     }
+}
+
+#[bench]
+fn bench_part1(b: &mut test::Bencher) {
+    b.iter(|| {
+        let input = include_str!("../../input1.txt");
+        let _ = part1(input);
+    });
 }
