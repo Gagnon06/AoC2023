@@ -18,25 +18,18 @@ fn part2(input: &str) -> String {
         .replace(" ", "")
         .split(":")
         .last().unwrap()
-        .parse::<u64>().unwrap();
+        .parse::<f64>().unwrap();
 
     let record_distance = lines.next().unwrap()
         .replace(" ", "")
         .split(":")
         .last().unwrap()
-        .parse::<u64>().unwrap();
+        .parse::<f64>().unwrap();
 
-    let winning_distances: Vec<u64> = (0..=time)
-        .filter_map(|hold_time| {
-            let distance = hold_time * (time - hold_time);
-            if distance > record_distance {
-                return Some(distance);
-            }
-            None
-        })
-        .collect();
+    let time1 = (-time + (time.powf(2.0) - (4.0 * record_distance)).sqrt()) / (-2.0);
+    let time2 = (-time - (time.powf(2.0) - (4.0 * record_distance)).sqrt()) / (-2.0);
 
-    winning_distances.len().to_string()
+    (time2.ceil()-time1.ceil()).to_string()
 }
 
 
