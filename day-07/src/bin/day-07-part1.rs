@@ -69,18 +69,18 @@ impl Hand {
             return HandType::FiveOfAKind;
         }
         else if card_counts.len() == 2 {
-            if card_counts[0] == 4usize || card_counts[1] == 4usize {
+            if card_counts.contains(&4) {
                 return HandType::FourOfAKind;
             }
-            else if card_counts[0] == 3usize || card_counts[1] == 3usize {
+            else if card_counts.contains(&3) {
                 return HandType::FullHouse;
             }
         }
         else if self.cards_map.len() == 3 {
-            if card_counts[0] == 3usize || card_counts[1] == 3usize || card_counts[2] == 3usize {
+            if card_counts.contains(&3) {
                 return HandType::ThreeOfAKind;
             }
-            else if card_counts[0] == 2usize || card_counts[1] == 2usize || card_counts[2] == 2usize {
+            else if card_counts.contains(&2) {
                 return HandType::TwoPair;
             }
         }
