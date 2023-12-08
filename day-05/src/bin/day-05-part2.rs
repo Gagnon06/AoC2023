@@ -16,10 +16,8 @@ struct Almanac {
 
 impl Almanac {
     fn extract_map(s: &str) -> ConversionMap {
-        let mut split_s = s.split('\n');
-        let _ = split_s.next(); // Skip first
-
-        split_s
+        s.split('\n')
+            .skip(1)
             .filter_map(|line| {
                 let numbers = line
                     .split(' ')
@@ -49,17 +47,16 @@ impl From<&str> for Almanac {
         let mut split_input = input.split("\n\n");
 
         type SeedsRangePart = Vec<(usize, usize)>;
-        let (seeds_range_start, seeds_range_len): (SeedsRangePart, SeedsRangePart) =
-            split_input
-                .next()
-                .unwrap()
-                .split(": ")
-                .last()
-                .unwrap()
-                .split(' ')
-                .map(|s| s.parse::<usize>().unwrap())
-                .enumerate()
-                .partition(|(idx, _)| idx % 2 == 0);
+        let (seeds_range_start, seeds_range_len): (SeedsRangePart, SeedsRangePart) = split_input
+            .next()
+            .unwrap()
+            .split(": ")
+            .last()
+            .unwrap()
+            .split(' ')
+            .map(|s| s.parse::<usize>().unwrap())
+            .enumerate()
+            .partition(|(idx, _)| idx % 2 == 0);
 
         let seeds_ranges = seeds_range_start
             .iter()

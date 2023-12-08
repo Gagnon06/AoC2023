@@ -42,7 +42,10 @@ fn part1(input: &str) -> String {
 }
 
 fn is_symbol(c: char) -> bool {
-    !matches!(c, '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.')
+    !matches!(
+        c,
+        '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.'
+    )
 }
 
 fn check_line(line: Option<&str>, col_idx: usize) -> bool {

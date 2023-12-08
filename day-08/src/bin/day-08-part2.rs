@@ -59,11 +59,7 @@ fn part2(input: &str) -> String {
     // From all the path we extract the Least Common Multiple
     // This only works because all paths are cyclic and they contain only one element ending with A (start)
     // and one element ending with Z (end)
-    counts
-        .into_iter()
-        .reduce(lcm)
-        .unwrap()
-        .to_string()
+    counts.into_iter().reduce(lcm).unwrap().to_string()
 }
 
 #[cfg(test)]

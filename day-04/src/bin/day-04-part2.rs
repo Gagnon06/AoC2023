@@ -74,10 +74,7 @@ fn main() {
 }
 
 fn part2(input: &str) -> String {
-    let cards = input
-        .lines()
-        .map(Card::from)
-        .collect::<Vec<Card>>();
+    let cards = input.lines().map(Card::from).collect::<Vec<Card>>();
 
     let mut cards_count = vec![1u32; cards.len()];
 

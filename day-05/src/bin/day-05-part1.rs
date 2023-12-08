@@ -15,10 +15,8 @@ struct Almanac {
 
 impl Almanac {
     fn extract_map(s: &str) -> ConversionMap {
-        let mut split_s = s.split('\n');
-        let _ = split_s.next(); // Skip first
-
-        split_s
+        s.split('\n')
+            .skip(1)
             .filter_map(|line| {
                 let numbers = line
                     .split(' ')
