@@ -52,15 +52,6 @@ impl Hand {
         for card in cards.iter() {
             cards_map.entry(*card).and_modify(|count| *count += 1).or_insert(1);
         }
-
-        if cards_map.len() > 1 {
-            if let Some(jokers_count) = cards_map.remove(&'J') {
-                let max_card  = cards_map.iter()
-                    .max_by(|a, b| a.1.cmp(&b.1))
-                    .map(|(card, _count)| card).unwrap();
-                cards_map.entry(*max_card).and_modify(|count| *count += jokers_count);
-            }
-        }
         
         Self {
             bid,
