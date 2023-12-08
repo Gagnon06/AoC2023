@@ -2,7 +2,6 @@
 
 extern crate test;
 
-
 use regex::Regex;
 
 const MAX_RED: u32 = 12;
@@ -13,7 +12,7 @@ struct Game {
     id: u32,
     red: Vec<u32>,
     green: Vec<u32>,
-    blue: Vec<u32>
+    blue: Vec<u32>,
 }
 
 impl From<&str> for Game {
@@ -23,19 +22,19 @@ impl From<&str> for Game {
             panic!("oops");
         };
 
-        let hands: Vec<Hand> = line.split(": ")
-            .last().unwrap()
+        let hands: Vec<Hand> = line
+            .split(": ")
+            .last()
+            .unwrap()
             .split("; ")
-            .map(|hand_str| {
-                Hand::from(hand_str)
-            })
+            .map(|hand_str| Hand::from(hand_str))
             .collect();
 
         Self {
             id: caps["id"].parse().unwrap(),
             red: hands.iter().filter_map(|hand| Some(hand.red)).collect(),
             green: hands.iter().filter_map(|hand| Some(hand.green)).collect(),
-            blue: hands.iter().filter_map(|hand| Some(hand.blue)).collect()
+            blue: hands.iter().filter_map(|hand| Some(hand.blue)).collect(),
         }
     }
 }
@@ -43,43 +42,53 @@ impl From<&str> for Game {
 struct Hand {
     red: u32,
     green: u32,
-    blue: u32
+    blue: u32,
 }
 
 impl From<&str> for Hand {
     fn from(hand_str: &str) -> Self {
-        let pairs: Vec<(u32, &str)> = hand_str.split(", ")
+        let pairs: Vec<(u32, &str)> = hand_str
+            .split(", ")
             .map(|color_str| {
                 let pair: Vec<&str> = color_str.split(" ").collect();
-                return (pair[0].parse::<u32>().unwrap(), pair[1])
+                return (pair[0].parse::<u32>().unwrap(), pair[1]);
             })
             .collect();
 
-        let red: Vec<u32> = pairs.iter().filter_map(|pair| {
-            if pair.1 == "red" {
-                return Some(pair.0);
-            }
-            None
-        }).collect();
+        let red: Vec<u32> = pairs
+            .iter()
+            .filter_map(|pair| {
+                if pair.1 == "red" {
+                    return Some(pair.0);
+                }
+                None
+            })
+            .collect();
 
-        let green: Vec<u32> = pairs.iter().filter_map(|pair| {
-            if pair.1 == "green" {
-                return Some(pair.0);
-            }
-            None
-        }).collect();
+        let green: Vec<u32> = pairs
+            .iter()
+            .filter_map(|pair| {
+                if pair.1 == "green" {
+                    return Some(pair.0);
+                }
+                None
+            })
+            .collect();
 
-        let blue: Vec<u32> = pairs.iter().filter_map(|pair| {
-            if pair.1 == "blue" {
-                return Some(pair.0);
-            }
-            None
-        }).collect();
+        let blue: Vec<u32> = pairs
+            .iter()
+            .filter_map(|pair| {
+                if pair.1 == "blue" {
+                    return Some(pair.0);
+                }
+                None
+            })
+            .collect();
 
         Self {
             red: *red.first().unwrap_or(&0),
             green: *green.first().unwrap_or(&0),
-            blue: *blue.first().unwrap_or(&0)
+            blue: *blue.first().unwrap_or(&0),
         }
     }
 }
@@ -95,9 +104,10 @@ fn part1(input: &str) -> String {
         .lines()
         .map(|line| Game::from(line))
         .filter_map(|game| {
-            if *game.red.iter().max().unwrap() <= MAX_RED && 
-               *game.green.iter().max().unwrap() <= MAX_GREEN && 
-               *game.blue.iter().max().unwrap() <= MAX_BLUE {
+            if *game.red.iter().max().unwrap() <= MAX_RED
+                && *game.green.iter().max().unwrap() <= MAX_GREEN
+                && *game.blue.iter().max().unwrap() <= MAX_BLUE
+            {
                 return Some(game.id);
             }
             None
@@ -118,7 +128,8 @@ mod tests {
                     Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue\n\
                     Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red\n\
                     Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red\n\
-                    Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
+                    Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green",
+        );
         assert_eq!(result, "8");
     }
 }

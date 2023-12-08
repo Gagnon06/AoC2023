@@ -2,15 +2,15 @@
 
 extern crate test;
 
-use std::collections::HashMap;
 use core::ops::Range;
+use std::collections::HashMap;
 
 type ConversionMap = HashMap<Range<usize>, Range<usize>>;
 
 #[derive(Debug)]
 struct Almanac {
     seeds: Vec<usize>,
-    maps: Vec<ConversionMap>
+    maps: Vec<ConversionMap>,
 }
 
 impl Almanac {
@@ -20,7 +20,8 @@ impl Almanac {
 
         split_s
             .filter_map(|line| {
-                let numbers = line.split(" ")
+                let numbers = line
+                    .split(" ")
                     .filter_map(|number| {
                         if number.is_empty() {
                             return None;
@@ -34,8 +35,8 @@ impl Almanac {
                     return None;
                 }
 
-                let dest_range = numbers[0]..numbers[0]+numbers[2];
-                let source_range = numbers[1]..numbers[1]+numbers[2];
+                let dest_range = numbers[0]..numbers[0] + numbers[2];
+                let source_range = numbers[1]..numbers[1] + numbers[2];
                 Some((source_range, dest_range))
             })
             .collect::<ConversionMap>()
@@ -46,20 +47,21 @@ impl From<&str> for Almanac {
     fn from(input: &str) -> Self {
         let mut split_input = input.split("\n\n");
 
-        let seeds = split_input.next().unwrap()
+        let seeds = split_input
+            .next()
+            .unwrap()
             .split(": ")
-            .last().unwrap()
+            .last()
+            .unwrap()
             .split(" ")
             .map(|s| s.parse::<usize>().unwrap())
             .collect::<Vec<usize>>();
 
-        let maps = split_input.map(|s| Almanac::extract_map(s))
+        let maps = split_input
+            .map(|s| Almanac::extract_map(s))
             .collect::<Vec<ConversionMap>>();
 
-        Self {
-            seeds,
-            maps
-        }
+        Self { seeds, maps }
     }
 }
 
@@ -72,24 +74,21 @@ fn main() {
 fn part1(input: &str) -> String {
     let almanac = Almanac::from(input);
 
-
-    let locations = almanac.seeds.iter()
-        .map(|seed| {
-            let mut next_source = *seed;
-            for map in almanac.maps.iter() {
-                for (source, dest) in map.iter() {
-                    if source.contains(&next_source) {
-                        next_source = dest.start + (next_source - source.start);
-                        break;
-                    }
+    let locations = almanac.seeds.iter().map(|seed| {
+        let mut next_source = *seed;
+        for map in almanac.maps.iter() {
+            for (source, dest) in map.iter() {
+                if source.contains(&next_source) {
+                    next_source = dest.start + (next_source - source.start);
+                    break;
                 }
             }
-            return next_source;
-        });
+        }
+        return next_source;
+    });
 
     locations.min().unwrap().to_string()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -131,7 +130,8 @@ mod tests {
             \n\
             humidity-to-location map:\n\
             60 56 37\n\
-            56 93 4");
+            56 93 4",
+        );
         assert_eq!(result, "35");
     }
 
@@ -141,7 +141,6 @@ mod tests {
         let result = part1(input);
         assert_eq!(result, "227653707");
     }
-
 }
 
 #[bench]

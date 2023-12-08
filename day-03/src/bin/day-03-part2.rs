@@ -2,15 +2,14 @@
 
 extern crate test;
 
-
 struct ParsedLine {
-    numbers: Vec<(u32, Vec<NumberRange>)>
+    numbers: Vec<(u32, Vec<NumberRange>)>,
 }
 
 #[derive(PartialEq, PartialOrd, Eq, Ord, Clone)]
 struct NumberRange {
     start: usize,
-    end: usize
+    end: usize,
 }
 
 fn main() {
@@ -23,12 +22,12 @@ fn part2(input: &str) -> String {
     let parsed_input = parse_input(input);
 
     let mut line_idx = 0usize;
-    let gears_ratio_totals = input.lines()
+    let gears_ratio_totals = input
+        .lines()
         .map(|line| {
-            let ratios = line.match_indices("*")
-                .filter_map(|(idx, _)| {
-                    extract_gear(&parsed_input, line_idx, idx)
-                })
+            let ratios = line
+                .match_indices("*")
+                .filter_map(|(idx, _)| extract_gear(&parsed_input, line_idx, idx))
                 .collect::<Vec<u32>>();
             line_idx += 1;
             return ratios;
@@ -36,34 +35,37 @@ fn part2(input: &str) -> String {
         .reduce(|mut a, mut b| {
             a.append(&mut b);
             a
-        }).unwrap();
+        })
+        .unwrap();
 
     gears_ratio_totals.into_iter().sum::<u32>().to_string()
 }
 
 fn parse_input(input: &str) -> Vec<ParsedLine> {
     let re = regex::Regex::new(r"\b\d+\b").unwrap();
-    input.lines()
+    input
+        .lines()
         .map(|line| {
-            let mut numbers = line.split(|c: char| !c.is_digit(10))
-                .filter_map(|v| if !v.is_empty() {
-                    let number = v.parse::<u32>().unwrap();
-                    let mut ranges = vec![];
-                    for mat in re.find_iter(line) {
-                        if mat.as_str() == number.to_string().as_str() {
-                            ranges.push(get_range(mat.start(), v.len()));
+            let mut numbers = line
+                .split(|c: char| !c.is_digit(10))
+                .filter_map(|v| {
+                    if !v.is_empty() {
+                        let number = v.parse::<u32>().unwrap();
+                        let mut ranges = vec![];
+                        for mat in re.find_iter(line) {
+                            if mat.as_str() == number.to_string().as_str() {
+                                ranges.push(get_range(mat.start(), v.len()));
+                            }
                         }
+                        Some((number, ranges))
+                    } else {
+                        None
                     }
-                    Some((number, ranges))
-                } else {
-                    None
                 })
                 .collect::<Vec<(u32, Vec<NumberRange>)>>();
             numbers.sort();
             numbers.dedup();
-            ParsedLine {
-                numbers
-            }
+            ParsedLine { numbers }
         })
         .collect()
 }
@@ -76,24 +78,29 @@ fn get_range(idx: usize, len: usize) -> NumberRange {
 
     NumberRange {
         start,
-        end: idx + len
+        end: idx + len,
     }
 }
 
 fn extract_gear(input: &Vec<ParsedLine>, line_idx: usize, col_idx: usize) -> Option<u32> {
     let mut ratios = vec![];
-    for line_idx in line_idx-1..line_idx+2 {
+    for line_idx in line_idx - 1..line_idx + 2 {
         if line_idx < input.len() {
-            ratios.append(&mut input[line_idx].numbers.clone().into_iter()
-                .filter_map(|(number, ranges)| {
-                    for range in ranges {
-                        if col_idx >= range.start && col_idx <= range.end {
-                            return Some(number);
+            ratios.append(
+                &mut input[line_idx]
+                    .numbers
+                    .clone()
+                    .into_iter()
+                    .filter_map(|(number, ranges)| {
+                        for range in ranges {
+                            if col_idx >= range.start && col_idx <= range.end {
+                                return Some(number);
+                            }
                         }
-                    }
-                    None
-                })
-                .collect::<Vec<u32>>());
+                        None
+                    })
+                    .collect::<Vec<u32>>(),
+            );
         }
     }
 
@@ -125,7 +132,8 @@ mod tests {
             ..592.....\n\
             ......755.\n\
             ...$.*....\n\
-            .664.598..");
+            .664.598..",
+        );
         assert_eq!(result, "467835");
     }
 
@@ -135,7 +143,6 @@ mod tests {
         let result = part2(input);
         assert_eq!(result, "84159075");
     }
-
 }
 
 #[bench]

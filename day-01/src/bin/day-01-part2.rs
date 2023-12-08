@@ -2,17 +2,25 @@
 
 extern crate test;
 
-
 const POSSIBLE_DIGITS: [(&'static str, u32); 18] = [
-    ("one", 1), ("1", 1),
-    ("two", 2), ("2", 2),
-    ("three", 3), ("3", 3), 
-    ("four", 4), ("4", 4), 
-    ("five", 5), ("5", 5), 
-    ("six", 6), ("6", 6), 
-    ("seven", 7), ("7", 7), 
-    ("eight", 8), ("8", 8), 
-    ("nine", 9), ("9", 9)
+    ("one", 1),
+    ("1", 1),
+    ("two", 2),
+    ("2", 2),
+    ("three", 3),
+    ("3", 3),
+    ("four", 4),
+    ("4", 4),
+    ("five", 5),
+    ("5", 5),
+    ("six", 6),
+    ("6", 6),
+    ("seven", 7),
+    ("7", 7),
+    ("eight", 8),
+    ("8", 8),
+    ("nine", 9),
+    ("9", 9),
 ];
 
 fn main() {
@@ -22,9 +30,7 @@ fn main() {
 }
 
 fn part2(input: &str) -> String {
-    let total: u32 = input.lines()
-        .map(|line| process_line(line))
-        .sum();
+    let total: u32 = input.lines().map(|line| process_line(line)).sum();
 
     total.to_string()
 }
@@ -36,14 +42,14 @@ fn process_line(line: &str) -> u32 {
         .iter()
         .filter_map(|digit| match line.find(digit.0) {
             Some(pos) => Some((pos, digit.1)),
-            None => None
+            None => None,
         })
         .collect();
     let mut possible_second_digits: Vec<(usize, u32)> = POSSIBLE_DIGITS
         .iter()
         .filter_map(|digit| match line.rfind(digit.0) {
             Some(pos) => Some((pos, digit.1)),
-            None => None
+            None => None,
         })
         .collect();
 
@@ -67,7 +73,8 @@ mod tests {
                     xtwone3four\n\
                     4nineeightseven2\n\
                     zoneight234\n\
-                    7pqrstsixteen\n");
+                    7pqrstsixteen\n",
+        );
         assert_eq!(result, "281");
     }
 }

@@ -2,7 +2,6 @@
 
 extern crate test;
 
-
 fn main() {
     let input = include_str!("../../input1.txt");
     let output = part1(input);
@@ -14,9 +13,12 @@ fn part1(input: &str) -> String {
 
     let mut lines = input.lines();
 
-    let times: Vec<u32> = lines.next().unwrap()
+    let times: Vec<u32> = lines
+        .next()
+        .unwrap()
         .split(":")
-        .last().unwrap()
+        .last()
+        .unwrap()
         .split(" ")
         .filter_map(|s| {
             if !s.is_empty() {
@@ -26,9 +28,12 @@ fn part1(input: &str) -> String {
         })
         .collect();
 
-    let distances: Vec<u32> = lines.next().unwrap()
+    let distances: Vec<u32> = lines
+        .next()
+        .unwrap()
         .split(":")
-        .last().unwrap()
+        .last()
+        .unwrap()
         .split(" ")
         .filter_map(|s| {
             if !s.is_empty() {
@@ -56,10 +61,8 @@ fn part1(input: &str) -> String {
         accumulator *= winning_distances.len();
     }
 
-
     accumulator.to_string()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -70,7 +73,8 @@ mod tests {
         let result = part1(
             "\
             Time:      7  15   30\n\
-            Distance:  9  40  200");
+            Distance:  9  40  200",
+        );
         assert_eq!(result, "288");
     }
 
@@ -80,7 +84,6 @@ mod tests {
         let result = part1(input);
         assert_eq!(result, "2344708");
     }
-
 }
 
 #[bench]

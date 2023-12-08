@@ -19,7 +19,7 @@ fn get_card_value(card: &char) -> u32 {
         'Q' => 12,
         'K' => 13,
         'A' => 14,
-        _ => panic!("oups, invalid card")
+        _ => panic!("oups, invalid card"),
     }
 }
 
@@ -31,14 +31,14 @@ enum HandType {
     ThreeOfAKind,
     FullHouse,
     FourOfAKind,
-    FiveOfAKind
+    FiveOfAKind,
 }
 
 #[derive(Debug)]
 struct Hand {
     bid: usize,
     cards: Vec<char>,
-    hand_type: HandType
+    hand_type: HandType,
 }
 
 impl Hand {
@@ -50,50 +50,50 @@ impl Hand {
         let mut cards_map = HashMap::new();
 
         for card in cards.iter() {
-            cards_map.entry(*card).and_modify(|count| *count += 1).or_insert(1);
+            cards_map
+                .entry(*card)
+                .and_modify(|count| *count += 1)
+                .or_insert(1);
         }
 
         if cards_map.len() > 1 {
             if let Some(jokers_count) = cards_map.remove(&'J') {
-                let max_card  = cards_map.iter()
+                let max_card = cards_map
+                    .iter()
                     .max_by(|a, b| a.1.cmp(&b.1))
-                    .map(|(card, _count)| card).unwrap();
-                cards_map.entry(*max_card).and_modify(|count| *count += jokers_count);
+                    .map(|(card, _count)| card)
+                    .unwrap();
+                cards_map
+                    .entry(*max_card)
+                    .and_modify(|count| *count += jokers_count);
             }
         }
-        
+
         Self {
             bid,
             cards,
-            hand_type: Self::get_hand_type(cards_map)
+            hand_type: Self::get_hand_type(cards_map),
         }
     }
 
     fn get_hand_type(cards_map: HashMap<char, usize>) -> HandType {
-        let card_counts: Vec<usize> = cards_map.iter()
-            .map(|(_card, &count)| count)
-            .collect();
+        let card_counts: Vec<usize> = cards_map.iter().map(|(_card, &count)| count).collect();
 
         if card_counts.len() == 1 {
             return HandType::FiveOfAKind;
-        }
-        else if card_counts.len() == 2 {
+        } else if card_counts.len() == 2 {
             if card_counts.contains(&4) {
                 return HandType::FourOfAKind;
-            }
-            else if card_counts.contains(&3) {
+            } else if card_counts.contains(&3) {
                 return HandType::FullHouse;
             }
-        }
-        else if cards_map.len() == 3 {
+        } else if cards_map.len() == 3 {
             if card_counts.contains(&3) {
                 return HandType::ThreeOfAKind;
-            }
-            else if card_counts.contains(&2) {
+            } else if card_counts.contains(&2) {
                 return HandType::TwoPair;
             }
-        }
-        else if cards_map.len() == 4 {
+        } else if cards_map.len() == 4 {
             return HandType::OnePair;
         }
 
@@ -129,7 +129,6 @@ impl Ord for Hand {
     }
 }
 
-
 fn main() {
     let input = include_str!("../../input1.txt");
     let output = part2(input);
@@ -137,20 +136,18 @@ fn main() {
 }
 
 fn part2(input: &str) -> String {
-    let mut hands: Vec<Hand> = input.lines()
-        .map(|line| Hand::new(line))
-        .collect();
+    let mut hands: Vec<Hand> = input.lines().map(|line| Hand::new(line)).collect();
 
     hands.sort();
 
-    let winnings: Vec<usize> = hands.iter()
+    let winnings: Vec<usize> = hands
+        .iter()
         .enumerate()
         .map(|(idx, hand)| hand.bid * (idx + 1usize))
         .collect();
 
     winnings.iter().sum::<usize>().to_string()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -164,7 +161,8 @@ mod tests {
             T55J5 684\n\
             KK677 28\n\
             KTJJT 220\n\
-            QQQJA 483");
+            QQQJA 483",
+        );
         assert_eq!(result, "5905");
     }
 
@@ -174,7 +172,6 @@ mod tests {
         let result = part2(input);
         assert_eq!(result, "250382098");
     }
-
 }
 
 #[bench]

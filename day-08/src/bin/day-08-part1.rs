@@ -16,18 +16,15 @@ fn part1(input: &str) -> String {
     let re = Regex::new(r"([A-Z]{3}) = \(([A-Z]{3}), ([A-Z]{3})\)").unwrap();
 
     let mut input_iter = input.lines();
-    let left_right: Vec<char> = input_iter.next().unwrap()
-        .chars()
-        .collect();
+    let left_right: Vec<char> = input_iter.next().unwrap().chars().collect();
     let _ = input_iter.next().unwrap();
 
     let raw_graph: String = input_iter.collect();
 
-    let graph:  HashMap<&str, (&str, &str)> = re.captures_iter(&raw_graph)
-        .map(|caps|  caps.extract())
-        .map(|(_, [key, left, right])| {
-            (key, (left, right))
-        })
+    let graph: HashMap<&str, (&str, &str)> = re
+        .captures_iter(&raw_graph)
+        .map(|caps| caps.extract())
+        .map(|(_, [key, left, right])| (key, (left, right)))
         .collect();
 
     let mut current_element_key = "AAA";
@@ -40,7 +37,7 @@ fn part1(input: &str) -> String {
             'R' => {
                 current_element_key = graph.get(current_element_key).unwrap().1;
             }
-            _ => panic!("Oops invalid left/right!")
+            _ => panic!("Oops invalid left/right!"),
         }
 
         if current_element_key == "ZZZ" {
@@ -50,7 +47,6 @@ fn part1(input: &str) -> String {
 
     "0".to_string()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -68,7 +64,8 @@ mod tests {
             DDD = (DDD, DDD)\n\
             EEE = (EEE, EEE)\n\
             GGG = (GGG, GGG)\n\
-            ZZZ = (ZZZ, ZZZ)");
+            ZZZ = (ZZZ, ZZZ)",
+        );
         assert_eq!(result, "2");
     }
 
@@ -80,7 +77,8 @@ mod tests {
             \n\
             AAA = (BBB, BBB)\n\
             BBB = (AAA, ZZZ)\n\
-            ZZZ = (ZZZ, ZZZ)");
+            ZZZ = (ZZZ, ZZZ)",
+        );
         assert_eq!(result, "6");
     }
 
@@ -90,7 +88,6 @@ mod tests {
         let result = part1(input);
         assert_eq!(result, "12361");
     }
-
 }
 
 #[bench]

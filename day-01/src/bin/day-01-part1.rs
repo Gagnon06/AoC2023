@@ -2,7 +2,6 @@
 
 extern crate test;
 
-
 const BASE: u32 = 10;
 
 fn main() {
@@ -12,9 +11,7 @@ fn main() {
 }
 
 fn part1(input: &str) -> String {
-    let total: u32 = input.lines()
-        .map(|line| process_line(line))
-        .sum();
+    let total: u32 = input.lines().map(|line| process_line(line)).sum();
 
     total.to_string()
 }
@@ -22,7 +19,8 @@ fn part1(input: &str) -> String {
 fn process_line(line: &str) -> u32 {
     dbg!(line);
 
-    let digits = line.chars()
+    let digits = line
+        .chars()
         .filter_map(|c| match c.to_digit(BASE) {
             Some(digit) => Some(digit),
             None => None,
@@ -42,7 +40,8 @@ mod tests {
             "1abc2\n\
                     pqr3stu8vwx\n\
                     a1b2c3d4e5f\n\
-                    treb7uchet\n");
+                    treb7uchet\n",
+        );
         assert_eq!(result, "142");
     }
 }

@@ -3,15 +3,15 @@
 
 extern crate test;
 
-use std::collections::HashMap;
 use core::ops::Range;
+use std::collections::HashMap;
 
 type ConversionMap = HashMap<Range<usize>, Range<usize>>;
 
 #[derive(Debug)]
 struct Almanac {
     seeds_ranges: Vec<Range<usize>>,
-    maps: Vec<ConversionMap>
+    maps: Vec<ConversionMap>,
 }
 
 impl Almanac {
@@ -21,7 +21,8 @@ impl Almanac {
 
         split_s
             .filter_map(|line| {
-                let numbers = line.split(" ")
+                let numbers = line
+                    .split(" ")
                     .filter_map(|number| {
                         if number.is_empty() {
                             return None;
@@ -36,8 +37,8 @@ impl Almanac {
                     return None;
                 }
 
-                let dest_range = numbers[0]..numbers[0]+numbers[2];
-                let source_range = numbers[1]..numbers[1]+numbers[2];
+                let dest_range = numbers[0]..numbers[0] + numbers[2];
+                let source_range = numbers[1]..numbers[1] + numbers[2];
                 Some((source_range, dest_range))
             })
             .collect::<ConversionMap>()
@@ -48,27 +49,30 @@ impl From<&str> for Almanac {
     fn from(input: &str) -> Self {
         let mut split_input = input.split("\n\n");
 
-        let (seeds_range_start, seeds_range_len): (Vec<(usize, usize)>, Vec<(usize, usize)>) = split_input.next().unwrap()
-            .split(": ")
-            .last().unwrap()
-            .split(" ")
-            .map(|s| s.parse::<usize>().unwrap())
-            .enumerate()
-            .partition(|(idx, _)| idx % 2 == 0);
+        let (seeds_range_start, seeds_range_len): (Vec<(usize, usize)>, Vec<(usize, usize)>) =
+            split_input
+                .next()
+                .unwrap()
+                .split(": ")
+                .last()
+                .unwrap()
+                .split(" ")
+                .map(|s| s.parse::<usize>().unwrap())
+                .enumerate()
+                .partition(|(idx, _)| idx % 2 == 0);
 
-        let seeds_ranges = seeds_range_start.iter()
+        let seeds_ranges = seeds_range_start
+            .iter()
             .map(|(_idx, start)| *start)
             .zip(seeds_range_len.iter().map(|(_idx, len)| *len))
-            .map(|(start, len)| start..start+len)
+            .map(|(start, len)| start..start + len)
             .collect();
 
-        let maps = split_input.map(|s| Almanac::extract_map(s))
+        let maps = split_input
+            .map(|s| Almanac::extract_map(s))
             .collect::<Vec<ConversionMap>>();
 
-        Self {
-            seeds_ranges,
-            maps
-        }
+        Self { seeds_ranges, maps }
     }
 }
 
@@ -103,7 +107,6 @@ fn part2(input: &str) -> String {
 
     "0".to_string()
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -145,7 +148,8 @@ mod tests {
             \n\
             humidity-to-location map:\n\
             60 56 37\n\
-            56 93 4");
+            56 93 4",
+        );
         assert_eq!(result, "46");
     }
 
@@ -155,7 +159,6 @@ mod tests {
     //    let result = part2(input);
     //    assert_eq!(result, "78775051");
     //}
-
 }
 
 //#[bench]

@@ -9,7 +9,7 @@ use std::io::Write;
 use regex::Regex;
 
 use graphviz_rust::{
-    cmd::{Layout, Format},
+    cmd::{Format, Layout},
     exec, parse,
     printer::PrinterContext,
 };
@@ -21,31 +21,29 @@ fn main() -> std::io::Result<()> {
     Ok(())
 }
 
-fn input_to_svg(input: &str) -> std::io::Result<Vec<u8>>  {
+fn input_to_svg(input: &str) -> std::io::Result<Vec<u8>> {
     let mut output = String::new();
 
-    output.push_str("\
+    output.push_str(
+        "\
         digraph G {\n\
-        graph [splines=true overlap=false]\n");
-
+        graph [splines=true overlap=false]\n",
+    );
 
     let line_regex = Regex::new(r"([A-Z0-9]{3}) = \(([A-Z0-9]{3}), ([A-Z0-9]{3})\)").unwrap();
 
     let mut input_iter = input.lines();
-    let _left_right: Vec<char> = input_iter.next().unwrap()
-        .chars()
-        .collect();
+    let _left_right: Vec<char> = input_iter.next().unwrap().chars().collect();
     let _ = input_iter.next().unwrap();
 
     let raw_graph: String = input_iter.collect();
 
-    let graph:  HashMap<&str, (&str, &str)> = line_regex.captures_iter(&raw_graph)
-        .map(|caps|  caps.extract())
-        .map(|(_, [key, left, right])| {
-            (key, (left, right))
-        })
+    let graph: HashMap<&str, (&str, &str)> = line_regex
+        .captures_iter(&raw_graph)
+        .map(|caps| caps.extract())
+        .map(|(_, [key, left, right])| (key, (left, right)))
         .collect();
-    
+
     for (source, (left, right)) in graph {
         output.push_str(format!("    {} -> {}\n", source, left).as_str());
         output.push_str(format!("    {} -> {}\n", source, right).as_str());
@@ -57,8 +55,6 @@ fn input_to_svg(input: &str) -> std::io::Result<Vec<u8>>  {
     exec(
         graph,
         &mut PrinterContext::default(),
-        vec![
-            Format::Svg.into(),
-            Layout::Neato.into()],
+        vec![Format::Svg.into(), Layout::Neato.into()],
     )
 }

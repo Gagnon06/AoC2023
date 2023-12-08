@@ -2,7 +2,6 @@
 
 extern crate test;
 
-
 use regex::Regex;
 
 fn main() {
@@ -55,7 +54,7 @@ fn is_symbol(c: char) -> bool {
         '8' => false,
         '9' => false,
         '.' => false,
-        _ => true
+        _ => true,
     }
 }
 
@@ -88,7 +87,8 @@ fn check_neighbors(input: &str, line_idx: usize, col_idx: usize) -> bool {
     if line_idx > 0 && check_line(input.lines().nth(line_idx - 1), col_idx) {
         return true;
     }
-    if line_idx < input.lines().count() - 1 && check_line(input.lines().nth(line_idx + 1), col_idx) {
+    if line_idx < input.lines().count() - 1 && check_line(input.lines().nth(line_idx + 1), col_idx)
+    {
         return true;
     }
     return check_line(input.lines().nth(line_idx), col_idx);
@@ -129,7 +129,8 @@ mod tests {
             ..592.....\n\
             ......755.\n\
             ...$.*....\n\
-            .664.598..");
+            .664.598..",
+        );
         assert_eq!(result, "4361");
     }
 
