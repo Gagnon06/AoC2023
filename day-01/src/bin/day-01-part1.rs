@@ -11,7 +11,7 @@ fn main() {
 }
 
 fn part1(input: &str) -> String {
-    let total: u32 = input.lines().map(|line| process_line(line)).sum();
+    let total: u32 = input.lines().map(process_line).sum();
 
     total.to_string()
 }
@@ -21,10 +21,7 @@ fn process_line(line: &str) -> u32 {
 
     let digits = line
         .chars()
-        .filter_map(|c| match c.to_digit(BASE) {
-            Some(digit) => Some(digit),
-            None => None,
-        })
+        .filter_map(|c| c.to_digit(BASE))
         .collect::<Vec<u32>>();
 
     digits.first().unwrap() * BASE + digits.last().unwrap()

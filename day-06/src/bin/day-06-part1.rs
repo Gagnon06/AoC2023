@@ -16,10 +16,10 @@ fn part1(input: &str) -> String {
     let times: Vec<u32> = lines
         .next()
         .unwrap()
-        .split(":")
+        .split(':')
         .last()
         .unwrap()
-        .split(" ")
+        .split(' ')
         .filter_map(|s| {
             if !s.is_empty() {
                 return Some(s.parse::<u32>().unwrap());
@@ -31,10 +31,10 @@ fn part1(input: &str) -> String {
     let distances: Vec<u32> = lines
         .next()
         .unwrap()
-        .split(":")
+        .split(':')
         .last()
         .unwrap()
-        .split(" ")
+        .split(' ')
         .filter_map(|s| {
             if !s.is_empty() {
                 return Some(s.parse::<u32>().unwrap());

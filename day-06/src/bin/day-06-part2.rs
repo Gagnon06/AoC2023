@@ -16,8 +16,8 @@ fn part2(input: &str) -> String {
     let time = lines
         .next()
         .unwrap()
-        .replace(" ", "")
-        .split(":")
+        .replace(' ', "")
+        .split(':')
         .last()
         .unwrap()
         .parse::<f64>()
@@ -26,8 +26,8 @@ fn part2(input: &str) -> String {
     let record_distance = lines
         .next()
         .unwrap()
-        .replace(" ", "")
-        .split(":")
+        .replace(' ', "")
+        .split(':')
         .last()
         .unwrap()
         .parse::<f64>()

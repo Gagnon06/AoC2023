@@ -15,7 +15,7 @@ impl From<&str> for Card {
         let id = split_line
             .next()
             .unwrap()
-            .split(" ")
+            .split(' ')
             .last()
             .unwrap()
             .parse::<u32>()
@@ -25,7 +25,7 @@ impl From<&str> for Card {
         let winning_numbers = numbers
             .next()
             .unwrap()
-            .split(" ")
+            .split(' ')
             .filter_map(|n| {
                 if !n.trim().is_empty() {
                     return Some(n.trim());
@@ -37,7 +37,7 @@ impl From<&str> for Card {
         let my_numbers = numbers
             .next()
             .unwrap()
-            .split(" ")
+            .split(' ')
             .filter_map(|n| {
                 if !n.trim().is_empty() {
                     return Some(n.trim());
@@ -59,7 +59,7 @@ impl Card {
     fn count_points(&self) -> u32 {
         let mut points = 0;
         for &num in self.my_numbers.iter() {
-            if let Some(_) = self.winning_numbers.iter().find(|&&x| x == num) {
+            if self.winning_numbers.iter().any(|&x| x == num) {
                 points += 1;
             }
         }
@@ -76,7 +76,7 @@ fn main() {
 fn part2(input: &str) -> String {
     let cards = input
         .lines()
-        .map(|line| Card::from(line))
+        .map(Card::from)
         .collect::<Vec<Card>>();
 
     let mut cards_count = vec![1u32; cards.len()];
@@ -84,7 +84,7 @@ fn part2(input: &str) -> String {
     for (idx, card) in cards.iter().enumerate() {
         let points = card.count_points();
         for new_idx in card.id..card.id + points {
-            cards_count[new_idx as usize] += cards_count[idx as usize];
+            cards_count[new_idx as usize] += cards_count[idx];
         }
     }
 

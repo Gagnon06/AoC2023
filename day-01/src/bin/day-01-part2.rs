@@ -2,7 +2,7 @@
 
 extern crate test;
 
-const POSSIBLE_DIGITS: [(&'static str, u32); 18] = [
+const POSSIBLE_DIGITS: [(&str, u32); 18] = [
     ("one", 1),
     ("1", 1),
     ("two", 2),
@@ -30,7 +30,7 @@ fn main() {
 }
 
 fn part2(input: &str) -> String {
-    let total: u32 = input.lines().map(|line| process_line(line)).sum();
+    let total: u32 = input.lines().map(process_line).sum();
 
     total.to_string()
 }
@@ -40,17 +40,11 @@ fn process_line(line: &str) -> u32 {
 
     let mut possible_first_digits: Vec<(usize, u32)> = POSSIBLE_DIGITS
         .iter()
-        .filter_map(|digit| match line.find(digit.0) {
-            Some(pos) => Some((pos, digit.1)),
-            None => None,
-        })
+        .filter_map(|digit| line.find(digit.0).map(|pos| (pos, digit.1)))
         .collect();
     let mut possible_second_digits: Vec<(usize, u32)> = POSSIBLE_DIGITS
         .iter()
-        .filter_map(|digit| match line.rfind(digit.0) {
-            Some(pos) => Some((pos, digit.1)),
-            None => None,
-        })
+        .filter_map(|digit| line.rfind(digit.0).map(|pos| (pos, digit.1)))
         .collect();
 
     possible_first_digits.sort_by(|a, b| a.0.cmp(&b.0));

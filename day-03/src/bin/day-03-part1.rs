@@ -42,20 +42,7 @@ fn part1(input: &str) -> String {
 }
 
 fn is_symbol(c: char) -> bool {
-    match c {
-        '0' => false,
-        '1' => false,
-        '2' => false,
-        '3' => false,
-        '4' => false,
-        '5' => false,
-        '6' => false,
-        '7' => false,
-        '8' => false,
-        '9' => false,
-        '.' => false,
-        _ => true,
-    }
+    !matches!(c, '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '.')
 }
 
 fn check_line(line: Option<&str>, col_idx: usize) -> bool {
@@ -80,7 +67,7 @@ fn check_line(line: Option<&str>, col_idx: usize) -> bool {
             }
         }
     }
-    return false;
+    false
 }
 
 fn check_neighbors(input: &str, line_idx: usize, col_idx: usize) -> bool {
@@ -99,18 +86,14 @@ fn is_part_number(input: &str, number: u32, line_idx: usize, col_idx: usize) -> 
         return true;
     }
 
-    if number >= 10 {
-        if check_neighbors(input, line_idx, col_idx + 1) {
-            return true;
-        }
+    if number >= 10 && check_neighbors(input, line_idx, col_idx + 1) {
+        return true;
     }
-    if number >= 100 {
-        if check_neighbors(input, line_idx, col_idx + 2) {
-            return true;
-        }
+    if number >= 100 && check_neighbors(input, line_idx, col_idx + 2) {
+        return true;
     }
 
-    return false;
+    false
 }
 
 #[cfg(test)]

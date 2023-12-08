@@ -15,20 +15,19 @@ struct Almanac {
 
 impl Almanac {
     fn extract_map(s: &str) -> ConversionMap {
-        let mut split_s = s.split("\n");
+        let mut split_s = s.split('\n');
         let _ = split_s.next(); // Skip first
 
         split_s
             .filter_map(|line| {
                 let numbers = line
-                    .split(" ")
+                    .split(' ')
                     .filter_map(|number| {
                         if number.is_empty() {
                             return None;
                         }
-                        Some(number)
+                        Some(number.parse::<usize>().unwrap())
                     })
-                    .map(|number| number.parse::<usize>().unwrap())
                     .collect::<Vec<usize>>();
                 if numbers.len() != 3 {
                     println!("Oops, numbers.len() != 3, : {:?}", numbers);
@@ -53,12 +52,12 @@ impl From<&str> for Almanac {
             .split(": ")
             .last()
             .unwrap()
-            .split(" ")
+            .split(' ')
             .map(|s| s.parse::<usize>().unwrap())
             .collect::<Vec<usize>>();
 
         let maps = split_input
-            .map(|s| Almanac::extract_map(s))
+            .map(Almanac::extract_map)
             .collect::<Vec<ConversionMap>>();
 
         Self { seeds, maps }
@@ -84,7 +83,7 @@ fn part1(input: &str) -> String {
                 }
             }
         }
-        return next_source;
+        next_source
     });
 
     locations.min().unwrap().to_string()

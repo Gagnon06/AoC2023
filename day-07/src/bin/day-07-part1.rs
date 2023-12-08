@@ -43,7 +43,7 @@ struct Hand {
 
 impl Hand {
     fn new(line: &str) -> Self {
-        let mut iter = line.split(" ");
+        let mut iter = line.split(' ');
         let cards: Vec<char> = iter.next().unwrap().chars().collect();
         let bid = iter.next().unwrap().parse().unwrap();
 
@@ -90,7 +90,7 @@ impl Hand {
 
 impl PartialEq for Hand {
     fn eq(&self, other: &Self) -> bool {
-        return self.hand_type == other.hand_type;
+        self.hand_type == other.hand_type
     }
 }
 
@@ -98,21 +98,21 @@ impl Eq for Hand {}
 
 impl PartialOrd for Hand {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        if self.hand_type == other.hand_type {
-            for (card1, card2) in self.cards.iter().zip(other.cards.iter()) {
-                if card1 == card2 {
-                    continue;
-                }
-                return get_card_value(card1).partial_cmp(&get_card_value(card2));
-            }
-        }
-        return self.hand_type.partial_cmp(&other.hand_type);
+        Some(self.cmp(other))
     }
 }
 
 impl Ord for Hand {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.partial_cmp(other).unwrap()
+        if self.hand_type == other.hand_type {
+            for (card1, card2) in self.cards.iter().zip(other.cards.iter()) {
+                if card1 == card2 {
+                    continue;
+                }
+                return get_card_value(card1).cmp(&get_card_value(card2));
+            }
+        }
+        self.hand_type.cmp(&other.hand_type)
     }
 }
 
@@ -123,7 +123,7 @@ fn main() {
 }
 
 fn part1(input: &str) -> String {
-    let mut hands: Vec<Hand> = input.lines().map(|line| Hand::new(line)).collect();
+    let mut hands: Vec<Hand> = input.lines().map(Hand::new).collect();
 
     hands.sort();
 

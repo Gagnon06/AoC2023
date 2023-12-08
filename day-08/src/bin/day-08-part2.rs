@@ -52,7 +52,7 @@ fn part2(input: &str) -> String {
                     return step_count + 1;
                 }
             }
-            return 0;
+            0
         })
         .collect();
 
@@ -61,7 +61,7 @@ fn part2(input: &str) -> String {
     // and one element ending with Z (end)
     counts
         .into_iter()
-        .reduce(|a, b| lcm(a, b))
+        .reduce(lcm)
         .unwrap()
         .to_string()
 }
@@ -73,7 +73,7 @@ mod tests {
     #[test]
     fn test_regex() {
         let end_regex = Regex::new(r"[A-Z]{2}Z").unwrap();
-        let haystack = vec!["AAZ", "XXD", "GCZ", "WWX", "ZZZ"];
+        let haystack = ["AAZ", "XXD", "GCZ", "WWX", "ZZZ"];
         let end_count = haystack
             .iter()
             .filter_map(|ele| end_regex.is_match(ele).then_some(ele))

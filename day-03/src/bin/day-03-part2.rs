@@ -26,11 +26,11 @@ fn part2(input: &str) -> String {
         .lines()
         .map(|line| {
             let ratios = line
-                .match_indices("*")
+                .match_indices('*')
                 .filter_map(|(idx, _)| extract_gear(&parsed_input, line_idx, idx))
                 .collect::<Vec<u32>>();
             line_idx += 1;
-            return ratios;
+            ratios
         })
         .reduce(|mut a, mut b| {
             a.append(&mut b);
@@ -47,7 +47,7 @@ fn parse_input(input: &str) -> Vec<ParsedLine> {
         .lines()
         .map(|line| {
             let mut numbers = line
-                .split(|c: char| !c.is_digit(10))
+                .split(|c: char| !c.is_ascii_digit())
                 .filter_map(|v| {
                     if !v.is_empty() {
                         let number = v.parse::<u32>().unwrap();
@@ -72,9 +72,7 @@ fn parse_input(input: &str) -> Vec<ParsedLine> {
 
 fn get_range(idx: usize, len: usize) -> NumberRange {
     let mut start = idx;
-    if start > 0 {
-        start -= 1;
-    }
+    start = start.saturating_sub(1);
 
     NumberRange {
         start,

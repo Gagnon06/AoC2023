@@ -27,14 +27,14 @@ impl From<&str> for Game {
             .last()
             .unwrap()
             .split("; ")
-            .map(|hand_str| Hand::from(hand_str))
+            .map(Hand::from)
             .collect();
 
         Self {
             id: caps["id"].parse().unwrap(),
-            red: hands.iter().filter_map(|hand| Some(hand.red)).collect(),
-            green: hands.iter().filter_map(|hand| Some(hand.green)).collect(),
-            blue: hands.iter().filter_map(|hand| Some(hand.blue)).collect(),
+            red: hands.iter().map(|hand| hand.red).collect(),
+            green: hands.iter().map(|hand| hand.green).collect(),
+            blue: hands.iter().map(|hand| hand.blue).collect(),
         }
     }
 }
@@ -50,8 +50,8 @@ impl From<&str> for Hand {
         let pairs: Vec<(u32, &str)> = hand_str
             .split(", ")
             .map(|color_str| {
-                let pair: Vec<&str> = color_str.split(" ").collect();
-                return (pair[0].parse::<u32>().unwrap(), pair[1]);
+                let pair: Vec<&str> = color_str.split(' ').collect();
+                (pair[0].parse::<u32>().unwrap(), pair[1])
             })
             .collect();
 
@@ -102,15 +102,12 @@ fn main() {
 fn part1(input: &str) -> String {
     let total: u32 = input
         .lines()
-        .map(|line| Game::from(line))
-        .filter_map(|game| {
-            if *game.red.iter().max().unwrap() <= MAX_RED
+        .filter_map(|line| {
+            let game = Game::from(line);
+            (*game.red.iter().max().unwrap() <= MAX_RED
                 && *game.green.iter().max().unwrap() <= MAX_GREEN
-                && *game.blue.iter().max().unwrap() <= MAX_BLUE
-            {
-                return Some(game.id);
-            }
-            None
+                && *game.blue.iter().max().unwrap() <= MAX_BLUE)
+                .then_some(game.id)
         })
         .sum();
 
