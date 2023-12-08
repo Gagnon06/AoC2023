@@ -36,13 +36,17 @@ fn input_to_svg(input: &str) -> std::io::Result<Vec<u8>>  {
         .chars()
         .collect();
     let _ = input_iter.next().unwrap();
-    let elements: HashMap<&str, (&str, &str)> = input_iter.map(|line| {
-            let (_, [key, left, right]) = line_regex.captures(line).unwrap().extract();
+
+    let raw_graph: String = input_iter.collect();
+
+    let graph:  HashMap<&str, (&str, &str)> = line_regex.captures_iter(&raw_graph)
+        .map(|caps|  caps.extract())
+        .map(|(_, [key, left, right])| {
             (key, (left, right))
         })
         .collect();
     
-    for (source, (left, right)) in elements {
+    for (source, (left, right)) in graph {
         output.push_str(format!("    {} -> {}\n", source, left).as_str());
         output.push_str(format!("    {} -> {}\n", source, right).as_str());
     }

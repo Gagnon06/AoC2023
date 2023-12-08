@@ -20,8 +20,12 @@ fn part1(input: &str) -> String {
         .chars()
         .collect();
     let _ = input_iter.next().unwrap();
-    let elements: HashMap<&str, (&str, &str)> = input_iter.map(|line| {
-            let (_, [key, left, right]) = re.captures(line).unwrap().extract();
+
+    let raw_graph: String = input_iter.collect();
+
+    let graph:  HashMap<&str, (&str, &str)> = re.captures_iter(&raw_graph)
+        .map(|caps|  caps.extract())
+        .map(|(_, [key, left, right])| {
             (key, (left, right))
         })
         .collect();
@@ -31,10 +35,10 @@ fn part1(input: &str) -> String {
     for idx in 0usize.. {
         match left_right[idx % left_right.len()] {
             'L' => {
-                current_element_key = elements.get(current_element_key).unwrap().0;
+                current_element_key = graph.get(current_element_key).unwrap().0;
             }
             'R' => {
-                current_element_key = elements.get(current_element_key).unwrap().1;
+                current_element_key = graph.get(current_element_key).unwrap().1;
             }
             _ => panic!("Oops invalid left/right!")
         }

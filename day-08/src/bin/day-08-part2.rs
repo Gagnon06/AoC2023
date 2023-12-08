@@ -21,13 +21,17 @@ fn part2(input: &str) -> String {
         .chars()
         .collect();
     let _ = input_iter.next().unwrap();
-    let elements: HashMap<&str, (&str, &str)> = input_iter.map(|line| {
-            let (_, [key, left, right]) = line_regex.captures(line).unwrap().extract();
+
+    let raw_graph: String = input_iter.collect();
+
+    let graph:  HashMap<&str, (&str, &str)> = line_regex.captures_iter(&raw_graph)
+        .map(|caps|  caps.extract())
+        .map(|(_, [key, left, right])| {
             (key, (left, right))
         })
         .collect();
 
-    let start_keys: Vec<&str> = elements.keys()
+    let start_keys: Vec<&str> = graph.keys()
         .filter_map(|&key| {
             (key.get(2..).unwrap() == "A").then_some(key)
         })
@@ -39,10 +43,10 @@ fn part2(input: &str) -> String {
             for step_count in 0usize.. {
                 match left_right[step_count % left_right.len()] {
                     'L' => {
-                        next_key = elements.get(next_key).unwrap().0;
+                        next_key = graph.get(next_key).unwrap().0;
                     }
                     'R' => {
-                        next_key = elements.get(next_key).unwrap().1;
+                        next_key = graph.get(next_key).unwrap().1;
                     }
                     _ => panic!("Oops invalid left/right!")
                 }
