@@ -1,4 +1,4 @@
-name: Rust
+name: AdventOfCode 2023 CI
 
 on:
   push:
